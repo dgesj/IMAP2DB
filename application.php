@@ -44,7 +44,11 @@ if ($grab_type == "fetch") {
           $uniqid = generateId(20).date("U");
           $emailMessage = new EmailObject($mysql,$uniqid,$source,$file_store);
           $emailMessage->readEmail();
-          imap_delete($inbox, $n);
+	  //The project forked by this one deletes fetched emails.
+	  //This behavior must be explicitly called for (in config.php) in this project
+          if (isset($delete_on_fetch)) {
+		  if ($delete_on_fetch) imap_delete($inbox, $n);
+	  }
         }
         imap_expunge($inbox);
       }
