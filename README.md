@@ -21,7 +21,7 @@ Navigate to the folder on your server where you want to run the script.
 4. Open the file config.php and add your MySQL and POP credentials.
 
 # Pipe vs Fetch
-You can either pipe an email address to the script to process each email as it arrives, or you can fetch emails one-by-one from a mailbox using a cron job (emails are deleted as they're processed.) We recommend using the fetch method.
+You can either pipe an email address to the script to process each email as it arrives, or you can fetch emails one-by-one from a mailbox using a cron job (emails can be optionally deleted as they're processed.) We recommend using the fetch method.
 
 The script is set to "fetch" by default but you can change it to "pipe" in config.php
 
