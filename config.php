@@ -5,9 +5,9 @@ $mysql_user = ""; // MySQL username
 $mysql_pass = ""; // MySQL password
 $mysql_db   = ""; // MySQL database name
 
-$imap_host  = ""; // IMAP host address
-$imap_flags = "/pop3/novalidate-cert"; // IMAP Flags
-$imap_user  = ""; // IMAP username
+$imap_host  = "imap.gmail.com.993"; // IMAP host address
+$imap_flags = "/imap/ssl/novalidate-cert"; // IMAP Flags
+$imap_user  = "username@gmail.com"; // IMAP username
 $imap_pass  = ""; // IMAP password
 
 $file_store = "files"; // Folder where file attachments are saved
