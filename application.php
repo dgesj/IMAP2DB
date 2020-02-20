@@ -1,6 +1,9 @@
 #!/usr/bin/php -q
 <?php
 
+//clone this script from robo77/php-mysql-fix as required depending on your PHP version (aliases mysql/mysqli calls).
+include_once ("php-mysql-fix/fix_mysql.inc.php");
+
 require_once("config.php");
 require_once("class.php");
 require_once("mimeDecode.php");
