@@ -200,7 +200,7 @@ class EmailObject {
     mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."')");
 
     // Update the row with additional fields being collected in this fork	  
-    mysql_query("UPDATE emails set to='" . $to . "', message-date='" . $message-date . "', message-id='" . $message-id . "' where uniqid='".$uniqid."'");
+    mysql_query("UPDATE emails set to='" . $to . "', message_date='" . $message-date . "', message_id='" . $message-id . "' where uniqid='".$uniqid."'");
 	  
     // Get the AI ID from MySQL
     $result = mysql_query ("SELECT id FROM emails WHERE uniqid='".$uniqid."'");
