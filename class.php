@@ -33,7 +33,7 @@ class EmailObject {
     // Get more headers not specified in the forked repository	  
     $this->to  = $this->decoded->headers["to"];
     $this->date  = $this->decoded->headers["date"];
-    $this->message-id  = $this->decoded->headers["message-id"];
+    $this->message_id  = $this->decoded->headers["message-id"];
 	  
     if (preg_match("/.* <.*@.*\..*>/i",$this->from,$matches)) {
       $this->name  = preg_replace("/ <(.*)>$/", "", $this->from);
@@ -188,19 +188,19 @@ class EmailObject {
     else
       $to = "";
     if (isset($this->date))
-      $message-date = mysql_real_escape_string(mb_convert_encoding($this->message-date,'UTF-8','UTF-8'), $mysql);
+      $message_date = mysql_real_escape_string(mb_convert_encoding($this->message_date,'UTF-8','UTF-8'), $mysql);
     else
-      $message-date = "";
-    if (isset($this->message-id))
-      $message-id = mysql_real_escape_string(mb_convert_encoding($this->message-id,'UTF-8','UTF-8'), $mysql);
+      $message_date = "";
+    if (isset($this->message_id))
+      $message_id = mysql_real_escape_string(mb_convert_encoding($this->message_id,'UTF-8','UTF-8'), $mysql);
     else
-      $message-id = "";
+      $message_id = "";
 	  
     // Insert message to MySQL
     mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."')");
 
     // Update the row with additional fields being collected in this fork	  
-    mysql_query("UPDATE emails set to='" . $to . "', message_date='" . $message-date . "', message_id='" . $message-id . "' where uniqid='".$uniqid."'");
+    mysql_query("UPDATE emails set to='" . $to . "', message_date='" . $message_date . "', message_id='" . $message_id . "' where uniqid='".$uniqid."'");
 	  
     // Get the AI ID from MySQL
     $result = mysql_query ("SELECT id FROM emails WHERE uniqid='".$uniqid."'");
