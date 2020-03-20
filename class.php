@@ -31,7 +31,7 @@ class EmailObject {
     $this->from  = $this->decoded->headers["from"];
 	  
     // Get more headers not specified in the forked repository	  
-    $this->to  = $this->decoded->headers["to"];
+    $this->to  = $this->decoded->headers["delivered-to"];
     $this->date  = $this->decoded->headers["date"];
     $this->message_id  = $this->decoded->headers["message-id"];
 	  
@@ -184,11 +184,12 @@ class EmailObject {
 	  
     // More headers 
     if (isset($this->to))
-      $to = mysql_real_escape_string(mb_convert_encoding($this->to,'UTF-8','UTF-8'), $mysql);
+      //$to = mysql_real_escape_string(mb_convert_encoding($this->to,'UTF-8','UTF-8'), $mysql);
+      $to = $this->to;
     else
       $to = "";
     if (isset($this->date))
-      $message_date = mysql_real_escape_string(mb_convert_encoding($this->message_date,'UTF-8','UTF-8'), $mysql);
+      $message_date = mysql_real_escape_string(mb_convert_encoding($this->date,'UTF-8','UTF-8'), $mysql);
     else
       $message_date = "";
     if (isset($this->message_id))
@@ -197,10 +198,7 @@ class EmailObject {
       $message_id = "";
 	  
     // Insert message to MySQL
-    mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."')");
-
-    // Update the row with additional fields being collected in this fork	  
-    mysql_query("UPDATE emails set to='" . $to . "', message_date='" . $message_date . "', message_id='" . $message_id . "' where uniqid='".$uniqid."'");
+    mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."')");
 	  
     // Get the AI ID from MySQL
     $result = mysql_query ("SELECT id FROM emails WHERE uniqid='".$uniqid."'");

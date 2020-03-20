@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `subject` varchar(255) NOT NULL,
   `body_text` text NOT NULL,
   `body_html` text NOT NULL,
-  `to` text,
+  `mailto` text,
   `message_date` text,
   `message_id` text,
   PRIMARY KEY (`id`)
