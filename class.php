@@ -6,8 +6,9 @@ class EmailObject {
   var $filename_aliases   = array();
   var $inline_image_types = array("png","gif","jpg","jpeg","bmp");
   
-  function __construct($mysql,$uniqid,$source,$file_store) {
+  function __construct($mysql,$uniqid,$source,$file_store,$mailbox_name="INBOX") {
     
+    $this->imap_mailbox = $mailbox_name;
     $this->mysql      = $mysql;
     $this->uniqid     = $uniqid;
     $this->source     = $source;

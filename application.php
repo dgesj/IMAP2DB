@@ -33,32 +33,41 @@ if ($grab_type == "pipe") {
 /* Fetch */
 if ($grab_type == "fetch") {
  
-  $inbox = @imap_open("{".$imap_host.$imap_flags."}INBOX",$imap_user,$imap_pass);
+  $mailbox = @imap_open("{".$imap_host.$imap_flags."}INBOX",$imap_user,$imap_pass);
  
-  if ($inbox) {
-    $emails = imap_search($inbox,"ALL");
-    
-    if ($emails) {
-      rsort($emails);
+  if ($mailbox) {
 
-      if ($emails) {
-        foreach($emails AS $n) {
-          $source = imap_fetchbody($inbox, $n, "");
-          $uniqid = generateId(20).date("U");
-          $emailMessage = new EmailObject($mysql,$uniqid,$source,$file_store);
-          $emailMessage->readEmail();
-	  //The project forked by this one deletes fetched emails.
-	  //This behavior must be explicitly called for (in config.php) in this project
-          if (isset($delete_on_fetch)) {
-		  if ($delete_on_fetch) imap_delete($inbox, $n);
-	  }
-        }
-        imap_expunge($inbox);
-      }
-    }
-    /* imap_errors() is called to supress PHP errors, such as when a mailbox is empty */
-    $errors = imap_errors();
-    imap_close($inbox);
+    $mailboxes = imap_getmailboxes($mailbox,"{".$imap_host.$imap_flags."}","*");
+    if (is_array($mailboxes)) {
+	foreach ($mailboxes as $key=>$val) {
+		$mailbox_name = str_replace("{".$imap_host.$imap_flags."}","",$val->name);
+		$return = imap_reopen ($mailbox,$val->name);
+    		$emails = imap_search($mailbox,"ALL");
+    
+    		if ($emails) {
+      			rsort($emails);
+
+      			if ($emails) {
+        			foreach($emails AS $n) {
+    	      				$source = imap_fetchbody($mailbox, $n, "");
+          				$uniqid = generateId(20).date("U");
+    					$emailMessage = new EmailObject($mysql,$uniqid,$source,$file_store,$mailbox_name);
+          				$emailMessage->readEmail();
+	 				//The project forked by this one deletes fetched emails.
+	  				//This behavior must be explicitly called for (e.g. in config.php) in this project
+          				if (isset($delete_on_fetch)) {
+		  				if ($delete_on_fetch) imap_delete($mailbox, $n);
+	  				}
+        			}
+        			imap_expunge($mailbox);
+      			}
+    		}
+    		/* imap_errors() is called to supress PHP errors, such as when a mailbox is empty */
+    		$errors = imap_errors();
+    		//imap_close($mailbox);
+	}//for each mailbox
+	imap_close($mailbox);
+	}
   }
 }
 
