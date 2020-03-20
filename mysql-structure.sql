@@ -2,7 +2,8 @@
 -- Table structure for table `emails`
 --
 
-CREATE TABLE IF NOT EXISTS `emails` (
+--DROP TABLE IF EXISTS `emails` ;
+CREATE TABLE `emails` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uniqid` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL,
@@ -11,9 +12,12 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `subject` varchar(255) NOT NULL,
   `body_text` text NOT NULL,
   `body_html` text NOT NULL,
-  `mailto` text,
-  `message_date` text,
-  `message_id` text,
+  `mailto` varchar(255) NOT NULL,
+  `message_date` varchar(255) NOT NULL,
+  `message_id` varchar(255) NOT NULL,
+  `imap_username` varchar(255) NOT NULL,
+  `imap_host` varchar(255) NOT NULL,
+  `imap_mailbox` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
@@ -21,7 +25,8 @@ CREATE TABLE IF NOT EXISTS `emails` (
 -- Table structure for table `files`
 --
 
-CREATE TABLE IF NOT EXISTS `files` (
+--DROP TABLE IF EXISTS `files` ;
+CREATE TABLE `files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email_id` int(11) NOT NULL,
   `filename` varchar(255) NOT NULL,

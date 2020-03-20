@@ -196,9 +196,17 @@ class EmailObject {
       $message_id = mysql_real_escape_string(mb_convert_encoding($this->message_id,'UTF-8','UTF-8'), $mysql);
     else
       $message_id = "";
+    if (isset($this->imap_mailbox))
+      $imap_mailbox = mysql_real_escape_string(mb_convert_encoding($this->imap_mailbox,'UTF-8','UTF-8'), $mysql);
+    else
+      $imap_mailbox = "INBOX";
+
 	  
     // Insert message to MySQL
-    mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."')");
+    //mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."')");
+    global $imap_user;
+    global $imap_host;
+    mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
 	  
     // Get the AI ID from MySQL
     $result = mysql_query ("SELECT id FROM emails WHERE uniqid='".$uniqid."'");
