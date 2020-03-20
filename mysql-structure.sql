@@ -11,6 +11,9 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `subject` varchar(255) NOT NULL,
   `body_text` text NOT NULL,
   `body_html` text NOT NULL,
+  `to` text,
+  `message_date` text,
+  `message_id` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
