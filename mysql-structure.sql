@@ -32,3 +32,7 @@ CREATE TABLE `files` (
   `filename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=120 ;
+
+ALTER TABLE emails ADD INDEX emails_email_indx (email);
+ALTER TABLE emails ADD INDEX emails_mailbox_indx (imap_mailbox);
+
