@@ -1,9 +1,9 @@
 --
--- Table structure for table `emails`
+-- Table structure for table `load_imap_emails`
 --
 
---DROP TABLE IF EXISTS `emails` ;
-CREATE TABLE `emails` (
+--DROP TABLE IF EXISTS `load_imap_emails` ;
+CREATE TABLE `load_imap_emails` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uniqid` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL,
@@ -22,17 +22,17 @@ CREATE TABLE `emails` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
--- Table structure for table `files`
+-- Table structure for table `load_imap_files`
 --
 
---DROP TABLE IF EXISTS `files` ;
-CREATE TABLE `files` (
+--DROP TABLE IF EXISTS `load_imap_files` ;
+CREATE TABLE `load_imap_files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email_id` int(11) NOT NULL,
   `filename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=120 ;
 
-ALTER TABLE emails ADD INDEX emails_email_indx (email);
-ALTER TABLE emails ADD INDEX emails_mailbox_indx (imap_mailbox);
+ALTER TABLE load_imap_emails ADD INDEX emails_email_indx (email);
+ALTER TABLE load_imap_emails ADD INDEX emails_mailbox_indx (imap_mailbox);
 

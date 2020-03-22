@@ -204,13 +204,14 @@ class EmailObject {
 
 	  
     // Insert message to MySQL
-    //mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."')");
     global $imap_user;
     global $imap_host;
-    mysql_query("INSERT INTO emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."',now(),'".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
+    $datestr = 'Wed, 28 Apr 2010 21:59:49 -0400';
+    $dateobj = DateTime::createFromFormat( 'D, d M Y H:i:s O', $datestr);
+    mysql_query("INSERT INTO load_imap_emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."','".$date->format( 'Y-m-d H:i:s')."','".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
 	  
     // Get the AI ID from MySQL
-    $result = mysql_query ("SELECT id FROM emails WHERE uniqid='".$uniqid."'");
+    $result = mysql_query ("SELECT id FROM load_imap_emails WHERE uniqid='".$uniqid."'");
     $row = mysql_fetch_array($result);
     $email_id = mysql_real_escape_string($row["id"], $mysql);
     
@@ -218,7 +219,7 @@ class EmailObject {
     if (sizeof($this->saved_files) > 0) {
       foreach($this->saved_files as $filename){
         $filename = mysql_real_escape_string(mb_convert_encoding($filename,'UTF-8','UTF-8'), $mysql);
-        mysql_query("INSERT INTO files (email_id,filename) VALUES ('".$email_id."','".$filename."')");
+        mysql_query("INSERT INTO load_imap_files (email_id,filename) VALUES ('".$email_id."','".$filename."')");
       }
     }
   }
