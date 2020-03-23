@@ -206,9 +206,17 @@ class EmailObject {
     // Insert message to MySQL
     global $imap_user;
     global $imap_host;
-    $datestr = 'Wed, 28 Apr 2010 21:59:49 -0400';
-    $dateobj = DateTime::createFromFormat( 'D, d M Y H:i:s O', $datestr);
-    mysql_query("INSERT INTO load_imap_emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."','".$date->format( 'Y-m-d H:i:s')."','".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
+    $dateobj = DateTime::createFromFormat( 'D, d M Y H:i:s O', $message_date);
+    if (!$dateobj) $dateobj = DateTime::createFromFormat( 'd M Y H:i:s O', $message_date);
+    if (!$dateobj) {
+	$substring = substr($message_date,0, strpos($message_date,"(")-2);
+	$dateobj = DateTime::createFromFormat( 'D, d M Y H:i:s O', $substring);
+	}
+    $msg_time="";
+    if ($dateobj) {
+	$msg_time=$dateobj->format( 'Y-m-d H:i:s');
+	}
+    mysql_query("INSERT INTO load_imap_emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."','".$msg_time."','".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
 	  
     // Get the AI ID from MySQL
     $result = mysql_query ("SELECT id FROM load_imap_emails WHERE uniqid='".$uniqid."'");
