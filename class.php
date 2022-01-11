@@ -221,7 +221,7 @@ class EmailObject {
     // Get the AI ID from mysqli
     $result = mysqli_query ($mysqli, "SELECT id FROM load_imap_emails WHERE uniqid='".$uniqid."'");
     $row = mysqli_fetch_array($result);
-    $email_id = mysqli_real_escape_string($row["id"], $mysqli);
+    $email_id = mysqli_real_escape_string($mysqli, $row["id"]);
     
     // Insert all the attached file names to mysqli
     if (sizeof($this->saved_files) > 0) {
