@@ -6,10 +6,10 @@ class EmailObject {
   var $filename_aliases   = array();
   var $inline_image_types = array("png","gif","jpg","jpeg","bmp");
   
-  function __construct($mysql,$uniqid,$source,$file_store,$mailbox_name="INBOX") {
+  function __construct($mysqli,$uniqid,$source,$file_store,$mailbox_name="INBOX") {
     
     $this->imap_mailbox = $mailbox_name;
-    $this->mysql      = $mysql;
+    $this->mysqli      = $mysqli;
     $this->uniqid     = $uniqid;
     $this->source     = $source;
     $this->file_store = $file_store;
@@ -55,7 +55,7 @@ class EmailObject {
       $this->bodyText = $this->decoded->body;
     }
 
-	// Save Message to MySQL
+	// Save Message to mysqli
     $this->saveToDb();
   }
 
@@ -129,15 +129,15 @@ class EmailObject {
     $this->saved_files[] = $filename;
   }
   
-  // Save message & files to MySQL
+  // Save message & files to mysqli
   private function saveToDb() {
     
-    $mysql  = $this->mysql;
+    $mysqli  = $this->mysqli;
     $uniqid = $this->uniqid;
     
     if (isset($this->bodyText)) {
       $body_text = $this->bodyText;
-      $body_text = mysql_real_escape_string(mb_convert_encoding(trim($body_text),'UTF-8','UTF-8'), $mysql);
+      $body_text = mysqli_real_escape_string(mb_convert_encoding(trim($body_text),'UTF-8','UTF-8'), $mysqli);
     } else {
       $body_text = "";
     }
@@ -164,46 +164,46 @@ class EmailObject {
       $body_html = preg_replace("/ data-id=\"(.*?)\"/i","",$body_html);
       $body_html = preg_replace("/ apple-inline=\"yes\"/i","",$body_html);
       
-      $body_html = mysql_real_escape_string(mb_convert_encoding(trim($body_html),'UTF-8','UTF-8'), $mysql);
+      $body_html = mysqli_real_escape_string(mb_convert_encoding(trim($body_html),'UTF-8','UTF-8'), $mysqli);
     } else {
       $body_html = "";
     }
         
-    // Prepare data for MySql
+    // Prepare data for mysqli
     if (isset($this->name))
-      $name = mysql_real_escape_string(mb_convert_encoding($this->name,'UTF-8','UTF-8'), $mysql);
+      $name = mysqli_real_escape_string(mb_convert_encoding($this->name,'UTF-8','UTF-8'), $mysqli);
     else
       $name = "";
     if (isset($this->email))
-      $email = mysql_real_escape_string(mb_convert_encoding($this->email,'UTF-8','UTF-8'), $mysql);
+      $email = mysqli_real_escape_string(mb_convert_encoding($this->email,'UTF-8','UTF-8'), $mysqli);
     else
       $email = "";
     if (isset($this->subject))
-      $subject = mysql_real_escape_string(mb_convert_encoding($this->subject,'UTF-8','UTF-8'), $mysql);
+      $subject = mysqli_real_escape_string(mb_convert_encoding($this->subject,'UTF-8','UTF-8'), $mysqli);
     else
       $subject = "";
 	  
     // More headers 
     if (isset($this->to))
-      //$to = mysql_real_escape_string(mb_convert_encoding($this->to,'UTF-8','UTF-8'), $mysql);
+      //$to = mysqli_real_escape_string(mb_convert_encoding($this->to,'UTF-8','UTF-8'), $mysqli);
       $to = $this->to;
     else
       $to = "";
     if (isset($this->date))
-      $message_date = mysql_real_escape_string(mb_convert_encoding($this->date,'UTF-8','UTF-8'), $mysql);
+      $message_date = mysqli_real_escape_string(mb_convert_encoding($this->date,'UTF-8','UTF-8'), $mysqli);
     else
       $message_date = "";
     if (isset($this->message_id))
-      $message_id = mysql_real_escape_string(mb_convert_encoding($this->message_id,'UTF-8','UTF-8'), $mysql);
+      $message_id = mysqli_real_escape_string(mb_convert_encoding($this->message_id,'UTF-8','UTF-8'), $mysqli);
     else
       $message_id = "";
     if (isset($this->imap_mailbox))
-      $imap_mailbox = mysql_real_escape_string(mb_convert_encoding($this->imap_mailbox,'UTF-8','UTF-8'), $mysql);
+      $imap_mailbox = mysqli_real_escape_string(mb_convert_encoding($this->imap_mailbox,'UTF-8','UTF-8'), $mysqli);
     else
       $imap_mailbox = "INBOX";
 
 	  
-    // Insert message to MySQL
+    // Insert message to mysqli
     global $imap_user;
     global $imap_host;
     $dateobj = DateTime::createFromFormat( 'D, d M Y H:i:s O', $message_date);
@@ -216,18 +216,18 @@ class EmailObject {
     if ($dateobj) {
 	$msg_time=$dateobj->format( 'Y-m-d H:i:s');
 	}
-    mysql_query("INSERT INTO load_imap_emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."','".$msg_time."','".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
+    mysqli_query("INSERT INTO load_imap_emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."','".$msg_time."','".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
 	  
-    // Get the AI ID from MySQL
-    $result = mysql_query ("SELECT id FROM load_imap_emails WHERE uniqid='".$uniqid."'");
-    $row = mysql_fetch_array($result);
-    $email_id = mysql_real_escape_string($row["id"], $mysql);
+    // Get the AI ID from mysqli
+    $result = mysqli_query ("SELECT id FROM load_imap_emails WHERE uniqid='".$uniqid."'");
+    $row = mysqli_fetch_array($result);
+    $email_id = mysqli_real_escape_string($row["id"], $mysqli);
     
-    // Insert all the attached file names to MySQL
+    // Insert all the attached file names to mysqli
     if (sizeof($this->saved_files) > 0) {
       foreach($this->saved_files as $filename){
-        $filename = mysql_real_escape_string(mb_convert_encoding($filename,'UTF-8','UTF-8'), $mysql);
-        mysql_query("INSERT INTO load_imap_files (email_id,filename) VALUES ('".$email_id."','".$filename."')");
+        $filename = mysqli_real_escape_string(mb_convert_encoding($filename,'UTF-8','UTF-8'), $mysqli);
+        mysqli_query("INSERT INTO load_imap_files (email_id,filename) VALUES ('".$email_id."','".$filename."')");
       }
     }
   }
