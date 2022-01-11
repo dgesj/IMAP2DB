@@ -34,7 +34,16 @@ class EmailObject {
     // Get more headers not specified in the forked repository	  
     $this->to  = $this->decoded->headers["delivered-to"];
     $this->date  = $this->decoded->headers["date"];
+
+    // Message ID
     $this->message_id  = $this->decoded->headers["message-id"];
+
+    // Skip duplicate
+    $mysqli  = $this->mysqli;
+    $result = mysqli_query ($mysqli, "SELECT message_id FROM load_imap_emails WHERE message_id='".$this->message_id."'");
+    if($result->num_rows == 1){
+      return 0;
+    }
 	  
     if (preg_match("/.* <.*@.*\..*>/i",$this->from,$matches)) {
       $this->name  = preg_replace("/ <(.*)>$/", "", $this->from);
