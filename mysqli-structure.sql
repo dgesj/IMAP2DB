@@ -19,7 +19,7 @@ CREATE TABLE `load_imap_emails` (
   `imap_host` varchar(255) NOT NULL,
   `imap_mailbox` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin2 AUTO_INCREMENT=22 ;
 
 --
 -- Table structure for table `load_imap_files`
@@ -31,7 +31,7 @@ CREATE TABLE `load_imap_files` (
   `email_id` int(11) NOT NULL,
   `filename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=120 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin2 AUTO_INCREMENT=120 ;
 
 ALTER TABLE load_imap_emails ADD INDEX emails_email_indx (email);
 ALTER TABLE load_imap_emails ADD INDEX emails_mailbox_indx (imap_mailbox);
