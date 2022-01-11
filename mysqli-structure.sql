@@ -2,7 +2,7 @@
 -- Table structure for table `load_imap_emails`
 --
 
---DROP TABLE IF EXISTS `load_imap_emails` ;
+DROP TABLE IF EXISTS `load_imap_emails` ;
 CREATE TABLE `load_imap_emails` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uniqid` varchar(255) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `load_imap_emails` (
 -- Table structure for table `load_imap_files`
 --
 
---DROP TABLE IF EXISTS `load_imap_files` ;
+DROP TABLE IF EXISTS `load_imap_files` ;
 CREATE TABLE `load_imap_files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email_id` int(11) NOT NULL,
@@ -35,4 +35,3 @@ CREATE TABLE `load_imap_files` (
 
 ALTER TABLE load_imap_emails ADD INDEX emails_email_indx (email);
 ALTER TABLE load_imap_emails ADD INDEX emails_mailbox_indx (imap_mailbox);
-
