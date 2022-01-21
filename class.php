@@ -228,7 +228,7 @@ class EmailObject {
     mysqli_query($mysqli, "INSERT INTO load_imap_emails (uniqid,time,name,email,subject,body_text,body_html,mailto,message_date,message_id,imap_username,imap_host,imap_mailbox) VALUES ('".$uniqid."','".$msg_time."','".$name."','".$email."','".$subject."','".$body_text."','".$body_html."','".$to."','".$message_date."','".$message_id."','".$imap_user."','".$imap_host."','".$imap_mailbox."')");
 	  
     // Get the AI ID from mysqli
-    $result = mysqli_query ($mysqli, "SELECT id FROM load_imap_emails WHERE uniqid='".$uniqid."'");
+    $result = mysqli_query ($mysqli, "SELECT id FROM load_imap_emails WHERE uniqid='$uniqid'");
     $row = mysqli_fetch_array($result);
     $email_id = mysqli_real_escape_string($mysqli, $row["id"]);
     
@@ -236,7 +236,7 @@ class EmailObject {
     if (sizeof($this->saved_files) > 0) {
       foreach($this->saved_files as $filename){
         $filename = mysqli_real_escape_string($mysqli, mb_convert_encoding($filename,'UTF-8','UTF-8'));
-        mysqli_query($mysqli, "INSERT INTO load_imap_files (email_id,filename) VALUES ('".$email_id."','".$filename."')");
+        mysqli_query($mysqli, "INSERT INTO load_imap_files (`email_id`, `filename`) VALUES ('$email_id', '$filename')");
       }
     }
   }
