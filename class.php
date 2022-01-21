@@ -236,7 +236,7 @@ class EmailObject {
     if (sizeof($this->saved_files) > 0) {
       foreach($this->saved_files as $filename){
         $filename = mysqli_real_escape_string($mysqli, mb_convert_encoding($filename,'UTF-8','UTF-8'));
-        mysqli_query("INSERT INTO load_imap_files (email_id,filename) VALUES ('".$email_id."','".$filename."')");
+        mysqli_query($mysqli, "INSERT INTO load_imap_files (email_id,filename) VALUES ('".$email_id."','".$filename."')");
       }
     }
   }
