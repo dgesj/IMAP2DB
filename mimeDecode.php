@@ -477,7 +477,7 @@ class Mail_mimeDecode extends PEAR
                 if (!$got_start) {
                     // munge headers for mbox style from
                     if ($value[0] == '>') {
-                        $value = substring($value, 1); // remove mbox >
+                        $value = substr($value, 1); // remove mbox >
                     }
                     if (substr($value,0,5) == 'From ') {
                         $value = 'Return-Path: ' . substr($value, 5);
@@ -771,9 +771,9 @@ class Mail_mimeDecode extends PEAR
                 case 'q':
                     $text = str_replace('_', ' ', $text);
                     preg_match_all('/=([a-f0-9]{2})/i', $text, $matches);
-                    foreach($matches[1] as $value)
-                        $text = str_replace('='.$value, chr(hexdec($value)), $text);
-                    break;
+                    //foreach($encoded as $value)
+                    //    $text = str_replace('='.$value, chr(hexdec($value)), $text);
+                   // break;
             }
             if (is_string($this->_decode_headers)) {
                 $conv = @iconv($charset, $this->_decode_headers, $text);
@@ -834,10 +834,10 @@ class Mail_mimeDecode extends PEAR
 
         // Replace encoded characters
 		 
+        //$cb = create_function('$matches',  ' return chr(hexdec($matches[0]));');
         $cb = function($matches){
             return (chr(hexdec($matches[0])));
         };
-         
         $input = preg_replace_callback( '/=([a-f0-9]{2})/i', $cb, $input);
 
         return $input;
